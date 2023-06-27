@@ -35,12 +35,15 @@ session.add_all(
     [publisher1, publisher2, book1, book2, book3, shop1, shop2, shop3, stock1, stock2, stock3, stock4, stock5, sale1,
      sale2, sale3, sale4])
 session.commit()
-inp_publisher = input('Автор')
-subq = session.query(Publisher).filter(Publisher.name == inp_publisher).subquery()
 
 result = session.query(Sale.price, Sale.count, Sale.date_sale, Book.title, Shop.name).join(Stock,
                                                                                            Sale.id_stock == Stock.id).join(
-    Shop, Stock.id_shop == Shop.id).join(Book, Book.id == Stock.id_book).join(subq, Book.id_publisher == subq.c.id)
+    Shop, Stock.id_shop == Shop.id).join(Book, Book.id == Stock.id_book).join(Publisher, Book.id_publisher == Publisher.id)
+inp_publisher = input('Автор')
+if inp_publisher.split().isdigit():
+    result = result.filter(Publisher.id == int(inp_publisher)).all()
+else:
+    result = result.filter(Publisher.name == inp_publisher).all()
 
 for sale_, book_, shop_ in result:
     print(f'{book_.title} | {shop_.name} | {sale_.price * sale_.count} | {sale_.date_sale}')
