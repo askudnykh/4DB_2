@@ -40,12 +40,13 @@ result = session.query(Sale.price, Sale.count, Sale.date_sale, Book.title, Shop.
                                                                                            Sale.id_stock == Stock.id).join(
     Shop, Stock.id_shop == Shop.id).join(Book, Book.id == Stock.id_book).join(Publisher, Book.id_publisher == Publisher.id)
 inp_publisher = input('Автор')
-if inp_publisher.split().isdigit():
+#ошибся, вместо strip(), написал split()
+if inp_publisher.strip().isdigit():
     result = result.filter(Publisher.id == int(inp_publisher)).all()
 else:
     result = result.filter(Publisher.name == inp_publisher).all()
 
-for sale_, book_, shop_ in result:
+for sale_, book_, shop_, stock_, publish_ in result:
     print(f'{book_.title} | {shop_.name} | {sale_.price * sale_.count} | {sale_.date_sale}')
 
 session.close()
