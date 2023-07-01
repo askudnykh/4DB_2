@@ -46,7 +46,7 @@ if inp_publisher.strip().isdigit():
 else:
     result = result.filter(Publisher.name == inp_publisher).all()
 
-for sale_, book_, shop_, stock_, publish_ in result:
-    print(f'{book_.title} | {shop_.name} | {sale_.price * sale_.count} | {sale_.date_sale}')
+for sale_price, sale_count, sale_date, book_title, shop_name in result:
+    print(f'{book_title} | {shop_name} | {sale_price * sale_count} | {sale_date}')
 
 session.close()
